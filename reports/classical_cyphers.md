@@ -62,8 +62,8 @@ def decrypt(self, encrypted_message):
         return "".join(decrypted_message)
 ```
 
-* ### Vigenre cypher
-For the Vigenre cypher encryption we use the formula. In this way, the encrypted letter index will be equal to the summ of the actual index and the index of the letter from the keyword, all this modulo 26
+* ### Vigenere cypher
+For the Vigenere cypher encryption we use the formula. In this way, the encrypted letter index will be equal to the summ of the actual index and the index of the letter from the keyword, all this modulo 26
 ```
 encrypted_letter = self.alpha[(letter_alpha_index + keyword_alpha_index) % 26]
 ```
@@ -92,11 +92,11 @@ def test_polybius_with_keyword(self):
     assert cypher.encrypt("whyareyourunning") == "52325421421254144542451515331531"
     assert cypher.decrypt("52325421421254144542451515331531") == "whyareyourunning"
 
-def test_vigenre(self):
+def test_vigenere(self):
     cypher = Vigenere('super')
     assert cypher.encrypt("perasperaadastra") == "hygejhygervuhxis"
     assert cypher.decrypt("hygejhygervuhxis") == "perasperaadastra"
 ```
 The results were as follows:
 
-![test_results](./screenshots/lab1_test_results.png)
+![test_results](./screenshots/classic_cyphers_test_results.png)
