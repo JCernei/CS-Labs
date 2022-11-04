@@ -5,7 +5,7 @@ from src.classical_cyphers.polybius_with_keyword import PolybiusWithKeyword
 from src.classical_cyphers.vigenere import Vigenere
 
 
-class TestCyphers(unittest.TestCase):
+class TestClassicalCyphers(unittest.TestCase):
     def test_caesar(self):
         cypher = Caesar(5)
         assert cypher.encrypt("anothersecretmessage") == "fstymjwxjhwjyrjxxflj"

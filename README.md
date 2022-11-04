@@ -12,8 +12,10 @@
 
 ## Implementations
 
-* [Laboratory Work 1](src/lab1)
+* [Classical cyphers](src/classical_cyphers)
+* [Symetrical cyphers](src/symetrical_cyphers)
 
 ## Reports
 
-* [Laboratory Work 1](reports/lab1.md)
+* [Classical cyphers](reports/classical_cyphers.md)
+* [Symetrical cyphers](reports/symetrical_cyphers.md)
