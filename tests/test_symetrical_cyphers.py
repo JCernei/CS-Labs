@@ -11,7 +11,6 @@ class TestSymetricalCyphers(unittest.TestCase):
                                    1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
 
         message = to_bits('Who am I')
-
         encrypted_message = cypher.encrypt(message)
         decrypted_message = cypher.decrypt(encrypted_message)
 
@@ -21,12 +20,11 @@ class TestSymetricalCyphers(unittest.TestCase):
         assert from_bits(decrypted_message) == 'Who am I'
 
     def test_des(self):
-        message = b'I am Ion'.hex()
-        key = 'AABB09182736C11D'
+        cypher = Des(key='AABB09182736C11D')
 
-        cypher = Des()
-        encrypted_message = cypher.encrypt(message, key)
-        decrypted_message = cypher.decrypt(encrypted_message, key)
+        message = b'I am Ion'.hex()
+        encrypted_message = cypher.encrypt(message)
+        decrypted_message = cypher.decrypt(encrypted_message)
 
         assert hex_to_bin(
             encrypted_message) == "0001111101001110001100100000001100110000011101001110101100110111"

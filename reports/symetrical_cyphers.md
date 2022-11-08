@@ -160,17 +160,13 @@ In the end, LPT and RPT are rejoined and a Final Permutation (FP) is performed o
 
 The result of this process produces 64-bit ciphertext.
 ```
-def encrypt(self, message, key):
-    keys = self.get_keys(key)
-    # initial transpose
+def encrypt(self, message):
+    keys = self.get_keys(self.key)
     message = self.transpose(IP, message)
-    # perform 16 rounds
     for i in range(16):
         message = self.round(message, keys[i], i)
-    # swap 2 halves 32-bits of the message
     message = message[8:16] + message[0:8]
-    # perform the final transpose
-    message = self.transpose(IP1, message)
+    message = self.transpose(FP, message)
     return message
 ```
 
@@ -182,9 +178,7 @@ To demonstrate the implementation I created several test
 def test_lfsr(self):
         cypher = LfsrStr(register=[0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
                                    1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
-
         message = to_bits('Who am I')
-
         encrypted_message = cypher.encrypt(message)
         decrypted_message = cypher.decrypt(encrypted_message)
 
@@ -194,12 +188,10 @@ def test_lfsr(self):
         assert from_bits(decrypted_message) == 'Who am I'
 
     def test_des(self):
+        cypher = Des(key = 'AABB09182736C11D')
         message = b'I am Ion'.hex()
-        key = 'AABB09182736C11D'
-
-        cypher = Des()
-        encrypted_message = cypher.encrypt(message, key)
-        decrypted_message = cypher.decrypt(encrypted_message, key)
+        encrypted_message = cypher.encrypt(message)
+        decrypted_message = cypher.decrypt(encrypted_message)
 
         assert hex_to_bin(encrypted_message) == 
             "0001111101001110001100100000001100110000011101001110101100110111"
