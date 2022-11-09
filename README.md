@@ -14,8 +14,12 @@
 
 * [Classical cyphers](src/classical_cyphers)
 * [Symetrical cyphers](src/symetrical_cyphers)
+* [Asymmetrical cyphers](src/asymmetrical_cyphers)
+
 
 ## Reports
 
 * [Classical cyphers](reports/classical_cyphers.md)
 * [Symetrical cyphers](reports/symetrical_cyphers.md)
+* [Asymmetrical cyphers](reports/asymmetrical_cyphers.md)
+
