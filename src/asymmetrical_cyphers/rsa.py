@@ -4,10 +4,10 @@ from src.cypher import Cypher
 
 class Rsa(Cypher):
     def __init__(self, p, q):
-        self.public_key, self.private_key = self.generate_keypair(p, q)
-        self.n = p * q
+        self.public_key, self.private_key, self.n = self.generate_keypair(p, q)
 
     def generate_keypair(self, p, q):
+        n = p * q
         phi = (p-1) * (q-1)
 
         for e in range(phi, 0, -1):
@@ -15,7 +15,7 @@ class Rsa(Cypher):
                 break
 
         d = pow(e, -1, phi)
-        return (e, d)
+        return (e, d, n)
 
     def encrypt(self, message):
         e = self.public_key

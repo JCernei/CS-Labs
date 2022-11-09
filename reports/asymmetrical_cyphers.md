@@ -27,14 +27,15 @@ Determine d as d ≡ e^(−1) mod phi(n); that is, d is the modular multiplicati
 
 ```
 def generate_keypair(self, p, q):
-    phi = (p-1) * (q-1)
+        n = p * q
+        phi = (p-1) * (q-1)
 
-    for e in range(phi, 0, -1):
-        if gcd(e, phi) == 1:
-            break
+        for e in range(phi, 0, -1):
+            if gcd(e, phi) == 1:
+                break
 
-    d = pow(e, -1, phi)
-    return (e, d)
+        d = pow(e, -1, phi)
+        return (e, d, n)
 ```
 In order to encrypt the message the formula with the public key is used 
 c ≡ m^e (mod n)
