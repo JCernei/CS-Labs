@@ -1,5 +1,5 @@
-from src.symetrical_cyphers.utils import to_bits, from_bits
-from src.symetrical_cyphers.stream.lfsr import Lfsr
+from src.cyphers.symetrical_cyphers.utils import to_bits, from_bits
+from src.cyphers.symetrical_cyphers.stream.lfsr import Lfsr
 
 
 class LfsrStr(Lfsr):

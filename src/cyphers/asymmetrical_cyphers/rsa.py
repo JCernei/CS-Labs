@@ -1,5 +1,5 @@
 from sympy import gcd
-from src.cypher import Cypher
+from src.cyphers.cypher import Cypher
 
 
 class Rsa(Cypher):

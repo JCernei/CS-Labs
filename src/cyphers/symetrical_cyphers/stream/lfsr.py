@@ -1,4 +1,4 @@
-from src.cypher import Cypher
+from src.cyphers.cypher import Cypher
 from functools import reduce
 from operator import xor
 

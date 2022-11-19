@@ -1,5 +1,5 @@
 import string
-from src.cypher import Cypher
+from src.cyphers.cypher import Cypher
 
 class Caesar(Cypher):
     def __init__(self, key):

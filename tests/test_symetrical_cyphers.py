@@ -1,8 +1,8 @@
 import unittest
-from src.symetrical_cyphers.utils import *
-from src.symetrical_cyphers.stream.lfsr_str import LfsrStr
-from src.symetrical_cyphers.block.des import Des
-from src.symetrical_cyphers.block.constants import *
+from src.cyphers.symetrical_cyphers.utils import *
+from src.cyphers.symetrical_cyphers.stream.lfsr_str import LfsrStr
+from src.cyphers.symetrical_cyphers.block.des import Des
+from src.cyphers.symetrical_cyphers.block.constants import *
 
 
 class TestSymetricalCyphers(unittest.TestCase):

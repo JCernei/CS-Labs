@@ -1,5 +1,5 @@
 import string
-from src.cypher import Cypher
+from src.cyphers.cypher import Cypher
 
 class PolybiusWithKeyword(Cypher):
     def __init__(self, keyword = ''):

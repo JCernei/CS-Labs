@@ -1,8 +1,8 @@
 import unittest
-from src.classical_cyphers.caesar import Caesar
-from src.classical_cyphers.caesar_with_keyword import CaesarWithKeyword
-from src.classical_cyphers.polybius_with_keyword import PolybiusWithKeyword
-from src.classical_cyphers.vigenere import Vigenere
+from src.cyphers.classical_cyphers.caesar import Caesar
+from src.cyphers.classical_cyphers.caesar_with_keyword import CaesarWithKeyword
+from src.cyphers.classical_cyphers.polybius_with_keyword import PolybiusWithKeyword
+from src.cyphers.classical_cyphers.vigenere import Vigenere
 
 
 class TestClassicalCyphers(unittest.TestCase):

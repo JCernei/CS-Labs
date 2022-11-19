@@ -1,6 +1,6 @@
-from src.symetrical_cyphers.block.constants import *
-from src.symetrical_cyphers.utils import *
-from src.cypher import Cypher
+from src.cyphers.symetrical_cyphers.block.constants import *
+from src.cyphers.symetrical_cyphers.utils import *
+from src.cyphers.cypher import Cypher
 
 
 class Des(Cypher):

@@ -1,4 +1,4 @@
-from src.symetrical_cyphers.stream.lfsr import Lfsr
+from src.cyphers.symetrical_cyphers.stream.lfsr import Lfsr
 from PIL import Image
 import numpy as np
 
@@ -44,17 +44,18 @@ class LfsrImg(Lfsr):
 if __name__ == '__main__':
 
     register = LfsrImg(register=[0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
-                    1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
+                                 1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
 
-    with Image.open('src/symetrical_cyphers/stream/images/secret.png').convert("RGB") as image:
+    with Image.open('src/cyphers/symetrical_cyphers/stream/images/secret.png').convert("RGB") as image:
         image.load()
     image_from_array = Image.fromarray(np.asarray(image), mode="RGB")
     register.encrypt_image(image, image_from_array)
-    image.save('src/symetrical_cyphers/stream/images/encrypted_secret.png')
+    image.save('src/cyphers/symetrical_cyphers/stream/images/encrypted_secret.png')
 
-    with Image.open('src/symetrical_cyphers/stream/images/encrypted_secret.png').convert("RGB") as encrypted_image:
+    with Image.open('src/cyphers/symetrical_cyphers/stream/images/encrypted_secret.png').convert("RGB") as encrypted_image:
         encrypted_image.load()
     encrypted_image_from_array = Image.fromarray(
         np.asarray(encrypted_image), mode="RGB")
     register.encrypt_image(encrypted_image, encrypted_image_from_array)
-    encrypted_image.save('src/symetrical_cyphers/stream/images/decrypted_secret.png')
+    encrypted_image.save(
+        'src/cyphers/symetrical_cyphers/stream/images/decrypted_secret.png')

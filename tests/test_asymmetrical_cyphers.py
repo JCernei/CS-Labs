@@ -1,5 +1,5 @@
 import unittest
-from src.asymmetrical_cyphers.rsa import Rsa
+from src.cyphers.asymmetrical_cyphers.rsa import Rsa
 
 
 class TestAsymmetricalCyphers(unittest.TestCase):
