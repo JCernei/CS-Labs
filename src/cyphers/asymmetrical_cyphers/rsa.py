@@ -35,6 +35,24 @@ class Rsa(Cypher):
             decrypted_message.append(decrypted_character)
         return decrypted_message
 
+    def sign_encrypt(self, message):
+        d = self.private_key
+        encrypted_message = []
+        for character in message:
+            ascii_value = ord(character)
+            encrypted_character = pow(ascii_value, d) % self.n
+            encrypted_message.append(encrypted_character)
+        return encrypted_message
+
+    def sign_decrypt(self, encrypted_message):
+        e = self.public_key
+        decrypted_message = []
+        for character in encrypted_message:
+            ascii_value = pow(character, e) % self.n
+            decrypted_character = chr(ascii_value)
+            decrypted_message.append(decrypted_character)
+        return decrypted_message
+
 
 if __name__ == '__main__':
     cypher = Rsa(421, 691)

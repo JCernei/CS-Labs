@@ -5,8 +5,7 @@ from src.services.digital_signature_service import DigitalSignatureService
 
 class TestServices(unittest.TestCase):
     def test_user_management(self):
-        database = {}
-        user_manager = UserManagementService(database)
+        user_manager = UserManagementService()
         user_manager.create_user(
             username='70m_470', password='5up3r_s3cRe7_p422w0rd')
 

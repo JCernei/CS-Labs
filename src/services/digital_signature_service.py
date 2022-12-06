@@ -8,13 +8,14 @@ class DigitalSignatureService:
 
     def sign(self, message):
         signature = hash(message)
-        encrypted_signature = self.cypher.encrypt(signature)
-        encrypted_message = self.cypher.encrypt(message)
+        encrypted_signature = self.cypher.sign_encrypt(signature)
+        encrypted_message = self.cypher.sign_encrypt(message)
         return (encrypted_message, encrypted_signature)
 
     def validate(self, encrypted_message, encrypted_signature):
-        recieved_message = ''.join(self.cypher.decrypt(encrypted_message))
-        recieved_signature = ''.join(self.cypher.decrypt(encrypted_signature))
+        recieved_message = ''.join(self.cypher.sign_decrypt(encrypted_message))
+        recieved_signature = ''.join(
+            self.cypher.sign_decrypt(encrypted_signature))
         if recieved_signature == hash(recieved_message):
             return True
         return False

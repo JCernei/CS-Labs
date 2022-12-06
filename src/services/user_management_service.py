@@ -2,8 +2,8 @@ from src.services.hash import hash
 
 
 class UserManagementService:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.database = {}
 
     def create_user(self, username, password):
         if username in self.database:
@@ -19,12 +19,10 @@ class UserManagementService:
 
 
 if __name__ == "__main__":
-    database = {}
-    user_manager = UserManagementService(database)
+    user_manager = UserManagementService()
 
     user_manager.create_user(
         username='70m_470', password='5up3r_s3cRe7_p422w0rd')
-    print(database)
 
     valid_user = user_manager.validate_user(
         username_input='Tom_Ato', password_input='Super_secret_password')

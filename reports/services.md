@@ -39,15 +39,36 @@ Frist, sign the message. This function takes as parameter the message itself, th
 ```
 def sign(self, message):
     signature = hash(message)
-    encrypted_signature = self.cypher.encrypt(signature)
-    encrypted_message = self.cypher.encrypt(message)
+    encrypted_signature = self.cypher.sign_encrypt(signature)
+    encrypted_message = self.cypher.sign_encrypt(message)
     return (encrypted_message, encrypted_signature)
 ```
+It is important to mention that for encryption we use the private key and for decryption the public one. For this, two additional functions were added to the asymetrical cypher implemeted before.
+```
+def sign_encrypt(self, message):
+    d = self.private_key
+    encrypted_message = []
+    for character in message:
+        ascii_value = ord(character)
+        encrypted_character = pow(ascii_value, d) % self.n
+        encrypted_message.append(encrypted_character)
+    return encrypted_message
+
+def sign_decrypt(self, encrypted_message):
+    e = self.public_key
+    decrypted_message = []
+    for character in encrypted_message:
+        ascii_value = pow(character, e) % self.n
+        decrypted_character = chr(ascii_value)
+        decrypted_message.append(decrypted_character)
+    return decrypted_message
+```
+
 The second step is message validation. This function takes as parameters the encrypted message and signature. After decrypting them, it checks if the recieved signature is the same as the hash of the recieved message.
 ```
 def validate(self, encrypted_message, encrypted_signature):
-    recieved_message = ''.join(self.cypher.decrypt(encrypted_message))
-    recieved_signature = ''.join(self.cypher.decrypt(encrypted_signature))
+    recieved_message = ''.join(self.cypher.sign_decrypt(encrypted_message))
+    recieved_signature = ''.join(self.cypher.sign_decrypt(encrypted_signature))
     if recieved_signature == hash(recieved_message):
         return True
     return False
@@ -61,8 +82,7 @@ To demonstrate the implementation two tests were performed:
 The first one tests the user validation fnction.
 ```
 def test_user_management(self):
-    database = {}
-    user_manager = UserManagementService(database)
+    user_manager = UserManagementService()
     user_manager.create_user(
         username='70m_470', password='5up3r_s3cRe7_p422w0rd')
 
