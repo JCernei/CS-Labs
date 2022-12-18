@@ -1,9 +1,10 @@
 from flask import Flask, request, session
-from werkzeug.exceptions import Unauthorized
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 import os
 import pyotp
 import joblib
+from src.app.user import User
+from src.app.exceptions import NotLoggedIn, InvalidAuthentication, check_login_status, validate_admin
 from src.cyphers.classical_cyphers.caesar import Caesar
 from src.cyphers.classical_cyphers.caesar_with_keyword import CaesarWithKeyword
 from src.cyphers.classical_cyphers.polybius_with_keyword import PolybiusWithKeyword
@@ -18,43 +19,19 @@ app.config["SECRET_KEY"] = os.urandom(16).hex()
 database = {}
 
 
-class User:
-    def __init__(self, username, password):
-        self.username = username
-        self.password_hash = generate_password_hash(password)
-        self.otp_seed = pyotp.random_base32()
-        self.role = 'user'
-        if username == 'admin':
-            self.role = 'admin'
+@app.errorhandler(NotLoggedIn)
+def handle_exception(e):
+    return 'visit login page first', 401
 
 
-def validate_admin(user):
-    if user.role != 'admin':
-        raise Unauthorized
-    pass
-
-
-@app.route("/delete_account", methods=['GET', 'DELETE'])
-def delete_account():
-    if not session.get('username'):
-        return 'visit login page first'
-
-    validate_admin(database[session['username']])
-
-    if request.method == 'DELETE':
-        username = request.form.get("account")
-        if username not in database:
-            return 'This user does not exist'
-        del database[username]
-        return f'Account of user "{username}" was succesfuly deleted'
-    return 'Admin page'
+@app.errorhandler(InvalidAuthentication)
+def handle_exception(e):
+    return 'Invalid username, password or code. Please try again.', 401
 
 
 @app.route("/")
 def index():
-    if not session.get('username'):
-        return 'visit login page first'
-
+    check_login_status(session)
     return 'Check out this cool cyphers'
 
 
@@ -84,21 +61,35 @@ def login():
         if valid and username in database and check_password_hash(database[username].password_hash, password):
             session['username'] = username
             return 'you can go to index page now'
-        return "Invalid username, password or code. Please try again."
+        raise InvalidAuthentication
 
     return 'this is the login page'
 
 
 @app.route('/logout')
 def logout():
-    if not session.get('username'):
-        return 'visit login page first'
+    check_login_status(session)
     session.pop('username')
     return 'you have succesfuly logout'
 
 
+@app.route("/delete_account", methods=['GET', 'DELETE'])
+def delete_account():
+    check_login_status(session)
+    validate_admin(database[session['username']])
+
+    if request.method == 'DELETE':
+        username = request.form.get("account")
+        if username not in database:
+            return 'This user does not exist'
+        del database[username]
+        return f'Account of user "{username}" was succesfuly deleted'
+    return 'Admin page'
+
+
 @app.route("/caesar", methods=['GET', 'POST'])
 def caesar():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         key = int(request.form.get("key"))
@@ -113,6 +104,7 @@ def caesar():
 
 @app.route("/caesar_with_keyword", methods=['GET', 'POST'])
 def caesar_with_keyword():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         key = int(request.form.get("key"))
@@ -128,6 +120,7 @@ def caesar_with_keyword():
 
 @app.route("/polybius", methods=['GET', 'POST'])
 def polybius():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         keyword = request.form.get("keyword")
@@ -142,6 +135,7 @@ def polybius():
 
 @app.route("/vigenere", methods=['GET', 'POST'])
 def vigenere():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         keyword = request.form.get("keyword")
@@ -156,6 +150,7 @@ def vigenere():
 
 @app.route("/lfsr", methods=['GET', 'POST'])
 def lfsr():
+    check_login_status(session)
     if request.method == 'POST':
         register = request.form.get("register")
         taps = request.form.get("taps")
@@ -171,6 +166,7 @@ def lfsr():
 
 @app.route("/des", methods=['GET', 'POST'])
 def des():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         key = request.form.get("key")
@@ -185,6 +181,7 @@ def des():
 
 @app.route("/rsa", methods=['GET', 'POST'])
 def rsa():
+    check_login_status(session)
     if request.method == 'POST':
         text = request.form.get("text")
         p = request.form.get("p")
