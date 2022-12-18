@@ -1,4 +1,5 @@
 from flask import Flask, request, session
+from werkzeug.exceptions import Unauthorized
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import pyotp
@@ -11,6 +12,7 @@ from src.cyphers.symetrical_cyphers.stream.lfsr_str import LfsrStr
 from src.cyphers.symetrical_cyphers.block.des import Des
 from src.cyphers.asymmetrical_cyphers.rsa import Rsa
 
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(16).hex()
 database = {}
@@ -21,6 +23,31 @@ class User:
         self.username = username
         self.password_hash = generate_password_hash(password)
         self.otp_seed = pyotp.random_base32()
+        self.role = 'user'
+        if username == 'admin':
+            self.role = 'admin'
+
+
+def validate_admin(user):
+    if user.role != 'admin':
+        raise Unauthorized
+    pass
+
+
+@app.route("/delete_account", methods=['GET', 'DELETE'])
+def delete_account():
+    if not session.get('username'):
+        return 'visit login page first'
+
+    validate_admin(database[session['username']])
+
+    if request.method == 'DELETE':
+        username = request.form.get("account")
+        if username not in database:
+            return 'This user does not exist'
+        del database[username]
+        return f'Account of user "{username}" was succesfuly deleted'
+    return 'Admin page'
 
 
 @app.route("/")
@@ -28,34 +55,34 @@ def index():
     if not session.get('username'):
         return 'visit login page first'
 
-    return 'congratulations you passed the 2FA'
+    return 'Check out this cool cyphers'
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    form_user = request.form.get("username")
-    form_pass = request.form.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
     if request.method == 'POST':
-        if form_user in database:
+        if username in database:
             return 'Usernaem already exists, go to login page'
         else:
-            user = User(form_user, form_pass)
-            database[form_user] = user
+            user = User(username, password)
+            database[username] = user
             return f'Use this code: {user.otp_seed} in your authenticator app'
     return 'this is the registration page'
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    form_user = request.form.get("username")
-    form_pass = request.form.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
 
-    totp_instance = pyotp.TOTP(database[form_user].otp_seed)
+    totp_instance = pyotp.TOTP(database[username].otp_seed)
     valid = totp_instance.verify(request.form.get("otp"))
 
     if request.method == 'POST':
-        if valid and form_user in database and check_password_hash(database[form_user].password_hash, form_pass):
-            session['username'] = form_user
+        if valid and username in database and check_password_hash(database[username].password_hash, password):
+            session['username'] = username
             return 'you can go to index page now'
         return "Invalid username, password or code. Please try again."
 
