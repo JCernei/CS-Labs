@@ -24,16 +24,17 @@ class Rsa(Cypher):
             ascii_value = ord(character)
             encrypted_character = pow(ascii_value, e) % self.n
             encrypted_message.append(encrypted_character)
-        return encrypted_message
+        return ", ".join(str(s) for s in encrypted_message)
 
     def decrypt(self, encrypted_message):
+        encrypted_message = [int(x) for x in encrypted_message.split(',')]
         d = self.private_key
         decrypted_message = []
         for character in encrypted_message:
             ascii_value = pow(character, d) % self.n
             decrypted_character = chr(ascii_value)
             decrypted_message.append(decrypted_character)
-        return decrypted_message
+        return "".join(str(s) for s in decrypted_message)
 
     def sign_encrypt(self, message):
         d = self.private_key
@@ -56,10 +57,10 @@ class Rsa(Cypher):
 
 if __name__ == '__main__':
     cypher = Rsa(421, 691)
-    message = ('you shall not pass')
+    message = 'you shall not pass'
 
     encrypted_message = cypher.encrypt(message)
-    print("".join(str(s) for s in encrypted_message))
+    print(", ".join(str(s) for s in encrypted_message))
 
     decrypted_message = cypher.decrypt(encrypted_message)
     print("".join(str(s) for s in decrypted_message))

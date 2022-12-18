@@ -14,6 +14,7 @@ class LfsrStr(Lfsr):
         return key
 
     def process_bits(self, message):
+        # message = to_bits(message)
         key = self.generate_key(len(message))
         processed_bits = []
         for i in range(len(message)):
@@ -21,16 +22,18 @@ class LfsrStr(Lfsr):
         return processed_bits
 
     def encrypt(self, message):
-        return self.process_bits(message)
+        message = to_bits(message)
+        return ''.join(map(str, self.process_bits(message)))
 
     def decrypt(self, encrypted_message):
-        return self.process_bits(encrypted_message)
+        encrypted_message = [int(x) for x in encrypted_message]
+        return from_bits(self.process_bits(encrypted_message))
 
 
 if __name__ == '__main__':
 
     cypher = LfsrStr(register=[0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
-                                1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
+                               1, 0, 0, 0, 1, 0, 0, 0, 0], taps=[16, 2])
 
     message = to_bits('Who am I')
 

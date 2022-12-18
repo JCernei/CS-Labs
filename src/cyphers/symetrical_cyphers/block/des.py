@@ -61,6 +61,7 @@ class Des(Cypher):
         return right + left
 
     def encrypt(self, message):
+        message = bytes(message, encoding='utf-8').hex()
         keys = self.get_keys(self.key)
         # initial transpose
         message = self.transpose(IP, message)
@@ -71,9 +72,10 @@ class Des(Cypher):
         message = message[8:16] + message[0:8]
         # perform the final transpose
         message = self.transpose(IP1, message)
-        return message
+        return hex_to_bin(message)
 
     def decrypt(self, message):
+        message = bin_to_hex(message)
         keys = self.get_keys(self.key)
         message = self.transpose(IP, message)
         # perform reverse 16-rounds
@@ -81,7 +83,7 @@ class Des(Cypher):
             message = self.round(message, keys[i])
         message = message[8:16] + message[0:8]
         message = self.transpose(IP1, message)
-        return message
+        return bytes.fromhex(message).decode('utf-8')
 
 
 if __name__ == '__main__':

@@ -5,9 +5,9 @@ from operator import xor
 
 class Lfsr(Cypher):
     def __init__(self, register, taps):
-        self.register = register
-        self.origin = register.copy()
-        self.taps = taps
+        self.register = [int(x) for x in register.split(',')]
+        self.origin = [int(x) for x in register.split(',')].copy()
+        self.taps = [int(x) for x in taps.split(',')]
 
     def _generate_key_bit(self):
         new_bit = reduce(xor, [self.register[(len(self.register)-1)-t]
