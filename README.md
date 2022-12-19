@@ -16,6 +16,7 @@
 * [Symetrical cyphers](src/cyphers/symetrical_cyphers)
 * [Asymmetrical cyphers](src/cyphers/asymmetrical_cyphers)
 * [Srvices](src/services/)
+* [App](src/app/)
 
 
 ## Reports
@@ -24,3 +25,4 @@
 * [Symetrical cyphers](reports/symetrical_cyphers.md)
 * [Asymmetrical cyphers](reports/asymmetrical_cyphers.md)
 * [Srvices](reports/services.md)
+* [App](reports/app.md)

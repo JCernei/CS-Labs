@@ -81,7 +81,7 @@ def delete_account():
     if request.method == 'DELETE':
         username = request.form.get("account")
         if username not in database:
-            return 'This user does not exist'
+            return 'This user does not exist', 404
         del database[username]
         return f'Account of user "{username}" was succesfuly deleted'
     return 'Admin page'
